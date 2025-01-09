@@ -14,6 +14,10 @@ public class Users {
     private String loginId;
     private String userName;
 
+    public void modifyUserName(String userName) {
+        this.userName = userName;
+    }
+
     public static Users from(UserEntity userEntity) {
         return Users.builder()
                 .id(userEntity.getId())
