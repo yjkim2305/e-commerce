@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
+@Table(name = "user")
 public class UserEntity {
 
     @Id
