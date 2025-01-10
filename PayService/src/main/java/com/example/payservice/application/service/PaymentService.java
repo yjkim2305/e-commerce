@@ -18,7 +18,7 @@ public class PaymentService {
     private final PaymentMethodRepository paymentMethodRepository;
     private final CreditCardPaymentAdapter creditCardPaymentAdapter;
 
-    public PaymentMethod registerPayment(Long userId, PaymentMethodType paymentMethodType, String creditCardNumber) {
+    public PaymentMethod registerPaymentMethod(Long userId, PaymentMethodType paymentMethodType, String creditCardNumber) {
         return paymentMethodRepository.save(PaymentMethod.of(userId, paymentMethodType, creditCardNumber));
     }
 
