@@ -44,4 +44,12 @@ public class DeliveryService {
         return deliveryRepository.findById(deliveryId);
     }
 
+    public UserAddress getAddress(Long addressId) {
+        return userAddressRepository.findById(addressId);
+    }
+
+    public UserAddress getUserAddress(Long userId) {
+        return userAddressRepository.findByUserId(userId);
+    }
+
 }
