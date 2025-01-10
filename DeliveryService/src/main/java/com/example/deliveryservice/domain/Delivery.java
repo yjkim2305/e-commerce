@@ -4,6 +4,8 @@ import com.example.deliveryservice.domain.enums.DeliveryStatus;
 import com.example.deliveryservice.infrastructure.entity.DeliveryEntity;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -37,5 +39,15 @@ public class Delivery {
                 .referenceCode(referenceCode)
                 .status(status)
                 .build();
+    }
+
+    public static List<Delivery> fromByEntity(List<DeliveryEntity> deliveryEntityList) {
+        return deliveryEntityList.stream()
+                .map(Delivery::from)
+                .toList();
+    }
+
+    public void modifyStatus(DeliveryStatus status) {
+        this.status = status;
     }
 }
