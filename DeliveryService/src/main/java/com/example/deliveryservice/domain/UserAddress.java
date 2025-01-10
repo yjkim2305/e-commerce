@@ -21,4 +21,12 @@ public class UserAddress {
                 .alias(userAdressEntity.getAlias())
                 .build();
     }
+
+    public static UserAddress of(Long userId, String address, String alias) {
+        return UserAddress.builder()
+                .userId(userId)
+                .address(address)
+                .alias(alias)
+                .build();
+    }
 }
