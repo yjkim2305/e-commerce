@@ -4,6 +4,7 @@ import com.example.memberservice.application.repository.UserRepository;
 import com.example.memberservice.domain.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ public class UserService {
         return userRepository.save(Users.of(loginId, userName));
     }
 
+    @Transactional
     public Users modifyUser(Long userId, String userName) {
         Users users = userRepository.findById(userId);
         users.modifyUserName(userName);
