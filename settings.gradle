@@ -1,2 +1,2 @@
 rootProject.name = 'ecommerce'
-include('MemberService','PayService')
+include('MemberService','PayService','DeliveryService')
