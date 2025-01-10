@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -16,7 +17,6 @@ public class UserService {
         return userRepository.save(Users.of(loginId, userName));
     }
 
-    @Transactional
     public Users modifyUser(Long userId, String userName) {
         Users users = userRepository.findById(userId);
         users.modifyUserName(userName);

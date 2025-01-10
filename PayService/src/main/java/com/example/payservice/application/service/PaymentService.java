@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
@@ -23,7 +24,6 @@ public class PaymentService {
         return paymentMethodRepository.save(PaymentMethod.of(userId, paymentMethodType, creditCardNumber));
     }
 
-    @Transactional
     public Payment processPayment(Long userId, Long orderId, Long amountKRW, Long paymentMethodId) {
 
         PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentMethodId);
