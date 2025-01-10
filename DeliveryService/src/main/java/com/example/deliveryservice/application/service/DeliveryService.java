@@ -40,5 +40,8 @@ public class DeliveryService {
         ));
     }
 
+    public Delivery getDelivery(Long deliveryId) {
+        return deliveryRepository.findById(deliveryId);
+    }
 
 }
