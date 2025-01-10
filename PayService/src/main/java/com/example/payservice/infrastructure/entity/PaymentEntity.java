@@ -43,6 +43,7 @@ public class PaymentEntity {
                 .paymentMethodType(payment.getPaymentMethodType())
                 .paymentData(payment.getPaymentData())
                 .paymentStatus(payment.getPaymentStatus())
+                .referenceCode(payment.getReferenceCode())
                 .build();
     }
 }

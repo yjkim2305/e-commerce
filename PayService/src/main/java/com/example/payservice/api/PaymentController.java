@@ -32,12 +32,12 @@ public class PaymentController {
     }
 
     @GetMapping("/payment/v1/users/{userId}/first/method")
-    public PaymentMethod getPaymentMethod(@PathVariable Long userId) {
+    public PaymentMethod getPaymentMethod(@PathVariable(value = "userId") Long userId) {
         return paymentService.getPaymentMehodByUser(userId);
     }
 
     @GetMapping("/payment/v1/payments/{paymentId}")
-    public Payment getPayment(@PathVariable Long paymentId) {
+    public Payment getPayment(@PathVariable(value = "paymentId") Long paymentId) {
         return paymentService.getPayment(paymentId);
     }
 }
