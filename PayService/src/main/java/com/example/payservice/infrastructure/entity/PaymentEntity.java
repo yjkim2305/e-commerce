@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "payment")
+@Table(name = "payment", indexes = {@Index(name = "idx_userId", columnList = "userId")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
@@ -19,10 +19,14 @@ public class PaymentEntity {
 
     private Long userId;
 
+    @Column(unique = true)
     private Long orderId;
+
     private Long amountKRW;
     private PaymentMethodType paymentMethodType;
     private String paymentData;
     private PaymentStatus paymentStatus;
+
+    @Column(unique = true)
     private Long referenceCode;
 }
