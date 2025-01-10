@@ -26,4 +26,12 @@ public class PaymentMethodRepositoryImpl implements PaymentMethodRepository {
                 () -> new PaymentException(ErrorCode.PAYMENT_MEHTOD_NOT_EXIST, "결제 수단이 존재하지 않습니다. %s".formatted(id)));
         return PaymentMethod.from(paymentMethodEntity);
     }
+
+    @Override
+    public PaymentMethod findByUserId(Long userId) {
+        PaymentMethodEntity paymentMethodEntity = paymentMethodJpaRepository.findByUserId(userId).stream().findFirst().orElseThrow(
+                () -> new PaymentException(ErrorCode.USER_PAYMENT_MEHTOD_NOT_EXIST, "사용자의 결제 수단이 존재하지 않습니다. %s".formatted(userId))
+        );
+        return PaymentMethod.from(paymentMethodEntity);
+    }
 }

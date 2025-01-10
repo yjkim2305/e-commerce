@@ -35,7 +35,7 @@ public class PaymentMethod {
 
     public void validatePaymentMethod() {
         if (!isOfType(PaymentMethodType.CREDIT_CARD)) {
-            throw new PaymentException(ErrorCode.USUPORT_PAYMENT_METHOD, "지원하지 않는 결제 수단입니다.");
+            throw new PaymentException(ErrorCode.UNSUPORT_PAYMENT_METHOD, "지원하지 않는 결제 수단입니다.");
         }
     }
 

@@ -35,6 +35,13 @@ public class PaymentService {
         return paymentRepository.save(Payment.of(userId, orderId
                 , amountKRW, paymentMethod.getPaymentMethodType()
                 , paymentMethod.getCreditCardNumber(), PaymentStatus.COMPLETED, refCode));
+    }
 
+    public PaymentMethod getPaymentMehodByUser(Long userId) {
+        return paymentMethodRepository.findByUserId(userId);
+    }
+
+    public Payment getPayment(Long paymentId) {
+        return paymentRepository.findById(paymentId);
     }
 }
