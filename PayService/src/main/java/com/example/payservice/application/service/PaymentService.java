@@ -9,6 +9,7 @@ import com.example.payservice.domain.enums.PaymentStatus;
 import com.example.payservice.pg.CreditCardPaymentAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class PaymentService {
         return paymentMethodRepository.save(PaymentMethod.of(userId, paymentMethodType, creditCardNumber));
     }
 
+    @Transactional
     public Payment processPayment(Long userId, Long orderId, Long amountKRW, Long paymentMethodId) {
 
         PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentMethodId);
