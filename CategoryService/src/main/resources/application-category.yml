@@ -22,7 +22,7 @@ spring:
     keyspace-name: catalog
     port: 9042
     contact-points: localhost
-    local-datacenter: dc1
+    local-datacenter: datacenter11
     schema-action: create-if-not-exists
 server:
   port: 8080
