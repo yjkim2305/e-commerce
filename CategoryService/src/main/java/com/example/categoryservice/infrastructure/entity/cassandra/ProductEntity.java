@@ -19,6 +19,9 @@ public class ProductEntity {
     private Long id;
 
     @Column
+    private Long sellerId;
+
+    @Column
     private String name;
 
     @Column
@@ -36,6 +39,7 @@ public class ProductEntity {
     public static ProductEntity toEntity(Product product) {
         return ProductEntity.builder()
                 .id(product.getId())
+                .sellerId(product.getSellerId())
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
