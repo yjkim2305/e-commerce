@@ -3,10 +3,9 @@ package com.example.searchservice.api;
 import com.example.searchservice.api.request.ProductTagsRegisterRequest;
 import com.example.searchservice.application.SearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,18 +13,18 @@ public class SearchController {
 
     private final SearchService searchService;
 
-    @PostMapping("/search/v1/addTagCache")
-    public void addTagCache(ProductTagsRegisterRequest rq) {
+    @PostMapping("/search/v1/add/tag")
+    public void addTagCache(@RequestBody ProductTagsRegisterRequest rq) {
         searchService.addTagCache(rq.productId(), rq.tags());
     }
 
-    @PostMapping("/search/v1/removeTagCache")
-    public void removeTagCache(ProductTagsRegisterRequest rq) {
+    @PostMapping("/search/v1/remove/tag")
+    public void removeTagCache(@RequestBody ProductTagsRegisterRequest rq) {
         searchService.removeTagCache(rq.productId(), rq.tags());
     }
 
-    @GetMapping("/search/v1/{tag}/productIds")
-    public void getTagProductIds(@PathVariable(value = "tag") String tag) {
-        searchService.getProductIdsByTag(tag);
+    @GetMapping("/search/v1/{tag}/products")
+    public List<Long> getTagProductIds(@PathVariable(value = "tag") String tag) {
+        return searchService.getProductIdsByTag(tag);
     }
 }
