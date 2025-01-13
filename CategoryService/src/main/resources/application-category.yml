@@ -1,0 +1,28 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ecommerce?useUnicode=yes&characterEncoding=UTF-8&rewriteBatchedStatements=true
+    username: ecommerce
+    password: 1234
+    hikari:
+      maximum-pool-size: 10
+      max-lifetime: 30000
+      connection-timeout: 3000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  cassandra:
+    keyspace-name: catalog
+    port: 9042
+    contact-points: localhost
+    local-datacenter: dc1
+    schema-action: create-if-not-exists
+server:
+  port: 8080
