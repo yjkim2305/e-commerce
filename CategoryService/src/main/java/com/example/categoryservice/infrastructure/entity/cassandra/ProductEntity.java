@@ -1,11 +1,17 @@
 package com.example.categoryservice.infrastructure.entity.cassandra;
 
+import com.example.categoryservice.domain.Product;
+import lombok.*;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.util.List;
 
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @Table("product")
 public class ProductEntity {
 
@@ -27,12 +33,14 @@ public class ProductEntity {
     @Column
     private List<String> tags;
 
-    public ProductEntity(Long id, String name, String description, Long price, Long stockCount, List<String> tags) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.stockCount = stockCount;
-        this.tags = tags;
+    public static ProductEntity toEntity(Product product) {
+        return ProductEntity.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .stockCount(product.getStockCount())
+                .tags(product.getTags())
+                .build();
     }
 }

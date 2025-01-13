@@ -1,5 +1,6 @@
 package com.example.categoryservice.infrastructure.entity.mysql;
 
+import com.example.categoryservice.domain.SellerProduct;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,4 +16,11 @@ public class SellerProductEntity {
     private Long id;
 
     private Long sellerId;
+
+    public static SellerProductEntity toEntity(SellerProduct sellerProduct) {
+        return SellerProductEntity.builder()
+                .id(sellerProduct.getId())
+                .sellerId(sellerProduct.getSellerId())
+                .build();
+    }
 }
