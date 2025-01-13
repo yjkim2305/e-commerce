@@ -3,6 +3,8 @@ package com.example.categoryservice.domain;
 import com.example.categoryservice.infrastructure.entity.mysql.SellerProductEntity;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -15,5 +17,11 @@ public class SellerProduct {
                 .id(sellerProductEntity.getId())
                 .sellerId(sellerProductEntity.getSellerId())
                 .build();
+    }
+
+    public static List<SellerProduct> fromByEntityList(List<SellerProductEntity> sellerProductEntityList) {
+        return sellerProductEntityList.stream()
+                .map(SellerProduct::from)
+                .toList();
     }
 }
