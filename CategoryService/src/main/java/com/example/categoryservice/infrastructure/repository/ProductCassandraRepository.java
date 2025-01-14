@@ -13,6 +13,6 @@ import java.util.Optional;
 @Repository
 public interface ProductCassandraRepository extends CassandraRepository<ProductEntity, Long> {
 
-    @Query("UPDATE product SET stock_count = stock_count - :count WHERE id = :productId IF stock_count >= :count")
-    boolean decreaseStock(@Param("productId") Long productId, @Param("count") Long count);
+    @Query("UPDATE product SET stockCount = stockCount - :stockCount WHERE id = :productId IF stockCount >= :stockCount")
+    boolean decreaseStock(@Param("productId") Long productId, @Param("stockCount") Long stockCount);
 }
