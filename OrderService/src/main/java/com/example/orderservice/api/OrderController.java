@@ -19,7 +19,7 @@ public class OrderController {
 
     @PostMapping("/order/v1/create/info")
     public OrderCreateResponse createOrderInfo(@RequestBody OrderCreateRequest rq) {
-        return new OrderCreateResponse(1L, 1L, 1L);
+        return null;
     }
 
     @PostMapping("/order/v1/process")
