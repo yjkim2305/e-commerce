@@ -11,6 +11,7 @@ import com.example.orderservice.feign.PaymentClient;
 import com.example.orderservice.infrastructure.entity.ProductOrderEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class OrderService {
     private final DeliveryClient deliveryClient;
     private final PaymentClient paymentClient;
 
+    @Transactional
     public OrderIntoDto createOrderInfo(Long userId, Long productId, Long count) {
         //상품 정보 조회
         ProductDto product = categoryClient.getProductById(productId);
@@ -41,6 +43,7 @@ public class OrderService {
         return OrderIntoDto.of(order.getId(), paymentMethod, userAddress);
     }
 
+    @Transactional
     public ProductOrder process(Long orderId, Long paymentMethodId, Long addressId) {
         ProductOrder order = orderRepository.findById(orderId);
 
