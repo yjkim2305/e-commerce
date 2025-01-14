@@ -24,17 +24,17 @@ public class OrderController {
 
     @PostMapping("/order/v1/process")
     public ProductOrder process(@RequestBody OrderProcessRequest rq) {
-        return ProductOrder.builder().build();
+        return orderService.process(rq.orderId(), rq.paymentMethodId(), rq.addressId());
     }
 
     @GetMapping("/order/v1/users/{userId}/orders")
     public List<ProductOrder> getUserOrders(@PathVariable(value = "userId") Long userId) {
-        return List.of(ProductOrder.builder().build());
+        return orderService.getUserOrders(userId);
     }
 
     @GetMapping("/order/v1/orders/{orderId}")
     public ProductOrderDetailResponse getOrder(@PathVariable(value = "orderId") Long orderId) {
-        return new ProductOrderDetailResponse(1L, 1L, 1L, 1L, 1L, OrderStatus.DELIVERY_REQUESTED, "", "");
+        return ProductOrderDetailResponse.from(orderService.getOrderDetail(orderId));
     }
 
 
