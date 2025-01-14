@@ -38,4 +38,10 @@ public class ProductOrder {
                 .deliveryId(deliveryId)
                 .build();
     }
+
+    public void modifyOrderInfo(Long paymentId, Long deliveryId, OrderStatus orderStatus) {
+        this.paymentId = paymentId;
+        this.deliveryId = deliveryId;
+        this.orderStatus = orderStatus;
+    }
 }

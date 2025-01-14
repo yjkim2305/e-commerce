@@ -15,7 +15,7 @@ public interface CategoryClient {
     ProductDto getProductById(@PathVariable(value = "productId") Long productId);
 
     @PostMapping("/products/{productId}/decrease/count")
-    public ProductDto decreaseStockCount(@PathVariable(value = "productId") Long productId
+    public void decreaseStockCount(@PathVariable(value = "productId") Long productId
             , @RequestBody ProductDecreaseStockCountDto productDecreaseStockCountDto);
 
 }

@@ -19,8 +19,7 @@ public class OrderController {
 
     @PostMapping("/order/v1/create/info")
     public OrderCreateResponse createOrderInfo(@RequestBody OrderCreateRequest rq) {
-        orderService.test();
-        return null;
+        return OrderCreateResponse.from(orderService.createOrderInfo(rq.userId(), rq.productId(), rq.count()));
     }
 
     @PostMapping("/order/v1/process")
@@ -30,7 +29,6 @@ public class OrderController {
 
     @GetMapping("/order/v1/users/{userId}/orders")
     public List<ProductOrder> getUserOrders(@PathVariable(value = "userId") Long userId) {
-        orderService.test();
         return List.of(ProductOrder.builder().build());
     }
 
