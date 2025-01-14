@@ -6,4 +6,5 @@ public interface ProductRepository {
     Product save(Product product);
     Product findById(Long id);
     void deleteById(Long id);
+    boolean decreaseStock(Long productId, Long stockCount);
 }

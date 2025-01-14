@@ -27,8 +27,18 @@ public class ProductRepositoryImpl implements ProductRepository {
         return Product.from(productEntity);
     }
 
+
+
     @Override
     public void deleteById(Long id) {
         productCassandraRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean decreaseStock(Long productId, Long stockCount) {
+        if (!productCassandraRepository.decreaseStock(productId, stockCount)) {
+            throw new CategoryException(ErrorCode.PRODUCT_NOT_EXIST, "존재하지 않는 상품입니다. id: %s".formatted(productId));
+        }
+        return true;
     }
 }
