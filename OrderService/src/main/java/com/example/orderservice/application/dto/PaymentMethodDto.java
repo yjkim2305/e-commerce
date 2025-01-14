@@ -1,4 +1,4 @@
-package com.example.orderservice.domain.dto;
+package com.example.orderservice.application.dto;
 
 import com.example.orderservice.domain.enums.PaymentMethodType;
 
