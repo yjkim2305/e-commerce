@@ -43,8 +43,8 @@ public class CategoryController {
     }
 
     @PostMapping("/category/v1/products/{productId}/decrease/count")
-    public Product decreaseStockCount(@PathVariable(value = "productId") Long productId
+    public void decreaseStockCount(@PathVariable(value = "productId") Long productId
             , @RequestBody ProductDecreaseStockCountRequest rq) {
-        return categoryService.decreaseStock(productId, rq.stockCount());
+        categoryService.decreaseStock(productId, rq.stockCount());
     }
 }

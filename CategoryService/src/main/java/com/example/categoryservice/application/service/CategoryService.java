@@ -54,10 +54,8 @@ public class CategoryService {
         return productRepository.findById(productId);
     }
 
-    public Product decreaseStock(Long productId, Long stockCount) {
-        Product product = productRepository.findById(productId);
-        product.decreaseStockCount(stockCount);
-        return productRepository.save(product);
+    public void decreaseStock(Long productId, Long stockCount) {
+        productRepository.decreaseStock(productId, stockCount);
     }
 
 
