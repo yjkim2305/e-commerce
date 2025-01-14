@@ -22,6 +22,8 @@ public class DeliveryEntity {
     private Long productCount;
     private String address;
     private Long referenceCode;
+
+    @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
     public static DeliveryEntity toEntity(Delivery delivery) {
