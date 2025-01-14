@@ -24,7 +24,7 @@ public class PaymentService {
         return paymentMethodRepository.save(PaymentMethod.of(userId, paymentMethodType, creditCardNumber));
     }
 
-    public Payment processPayment(Long userId, Long orderId, Long amountKRW, Long paymentMethodId) {
+    public Payment processPayment(Long orderId, Long userId, Long amountKRW, Long paymentMethodId) {
 
         PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentMethodId);
 

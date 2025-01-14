@@ -13,7 +13,7 @@ public class PaymentRegisterDto {
    private Long amountKRW;
    private Long paymentMethodId;
 
-   public static PaymentRegisterDto of(Long userId, Long orderId, Long amountKRW, Long paymentMethodId) {
+   public static PaymentRegisterDto of(Long orderId, Long userId, Long amountKRW, Long paymentMethodId) {
       return PaymentRegisterDto.builder()
               .userId(userId)
               .orderId(orderId)

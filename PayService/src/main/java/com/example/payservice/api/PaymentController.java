@@ -24,8 +24,8 @@ public class PaymentController {
     @PostMapping("/payment/v1/process")
     public Payment processPayment(@RequestBody PaymentRegisterRequest rq) {
         return paymentService.processPayment(
-                rq.userId(),
                 rq.orderId(),
+                rq.userId(),
                 rq.amountKRW(),
                 rq.paymentMethodId()
         );
