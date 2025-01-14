@@ -13,10 +13,10 @@ public interface PaymentClient {
     @GetMapping("/payments/{paymentId}")
     public PaymentDto getPayment(@PathVariable(value = "paymentId") Long paymentId);
 
-    @GetMapping("/payment/v1/users/{userId}/first/method")
+    @GetMapping("/users/{userId}/first/method")
     public PaymentMethodDto getPaymentMethod(@PathVariable(value = "userId") Long userId);
 
-    @PostMapping("/payment/v1/process")
+    @PostMapping("/process")
     public PaymentDto processPayment(@RequestBody PaymentRegisterDto rq);
 
 }
