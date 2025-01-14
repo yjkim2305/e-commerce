@@ -1,5 +1,6 @@
 package com.example.orderservice.application.service;
 
+import com.example.orderservice.api.response.ProductOrderDetailResponse;
 import com.example.orderservice.application.dto.*;
 import com.example.orderservice.application.repository.OrderRepository;
 import com.example.orderservice.domain.ProductOrder;
@@ -10,6 +11,8 @@ import com.example.orderservice.feign.PaymentClient;
 import com.example.orderservice.infrastructure.entity.ProductOrderEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +72,19 @@ public class OrderService {
         order.modifyOrderInfo(payment.getId(), delivery.getId(), OrderStatus.DELIVERY_REQUESTED);
 
         return orderRepository.save(order);
+    }
+
+    public List<ProductOrder> getUserOrders(Long userId) {
+        return orderRepository.findByUserId(userId);
+    }
+
+    public ProductOrderDetailDto getOrderDetail(Long orderId) {
+        ProductOrder order = orderRepository.findById(orderId);
+
+        PaymentDto payment = paymentClient.getPayment(order.getPaymentId());
+        DeliveryDto delivery = deliveryClient.getDelivery(order.getDeliveryId());
+
+        return ProductOrderDetailDto.of(order, payment, delivery);
     }
 
 
