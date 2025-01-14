@@ -55,7 +55,10 @@ public class CategoryService {
     }
 
     public void decreaseStock(Long productId, Long stockCount) {
-        productRepository.decreaseStock(productId, stockCount);
+        //redisson try lock 구현
+        Product product = productRepository.findById(productId);
+        product.decreaseStockCount(stockCount);
+        productRepository.save(product);
     }
 
 
