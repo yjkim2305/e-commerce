@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class KafkaConcertConsumer {
+public class KafkaSearchConsumer {
 
     private final ObjectMapper objectMapper;
     private final SearchService searchService;
