@@ -21,15 +21,15 @@ public class PaymentController {
         );
     }
 
-    @PostMapping("/payment/v1/process")
-    public Payment processPayment(@RequestBody PaymentRegisterRequest rq) {
-        return paymentService.processPayment(
-                rq.orderId(),
-                rq.userId(),
-                rq.amountKRW(),
-                rq.paymentMethodId()
-        );
-    }
+//    @PostMapping("/payment/v1/process")
+//    public Payment processPayment(@RequestBody PaymentRegisterRequest rq) {
+//        return paymentService.processPayment(
+//                rq.orderId(),
+//                rq.userId(),
+//                rq.amountKRW(),
+//                rq.paymentMethodId()
+//        );
+//    }
 
     @GetMapping("/payment/v1/users/{userId}/first/method")
     public PaymentMethod getPaymentMethod(@PathVariable(value = "userId") Long userId) {
