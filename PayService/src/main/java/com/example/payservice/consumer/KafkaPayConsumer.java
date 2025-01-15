@@ -24,7 +24,7 @@ public class KafkaPayConsumer {
     private final KafkaMessageProducer kafkaMessageProducer;
 
     @KafkaListener(topics = "payment_request")
-    public void consumeTagAdded(ConsumerRecord<String, String> data, Acknowledgment acknowledgment, Consumer<String, String> consumer){
+    public void consumePayRequest(ConsumerRecord<String, String> data, Acknowledgment acknowledgment, Consumer<String, String> consumer){
         try {
 
             KafkaPaymentProcessMessage message = objectMapper.readValue(data.value(), KafkaPaymentProcessMessage.class);

@@ -19,10 +19,10 @@ public class DeliveryController {
         return deliveryService.addUserAddress(rq.userId(), rq.address(), rq.alias());
     }
 
-    @PostMapping("/delivery/v1/process")
-    public Delivery processDelivery(@RequestBody DeliveryRegisterRequest rq) {
-        return deliveryService.processDelivery(rq.orderId(), rq.productName(), rq.productCount(), rq.address());
-    }
+//    @PostMapping("/delivery/v1/process")
+//    public Delivery processDelivery(@RequestBody DeliveryRegisterRequest rq) {
+//        return deliveryService.processDelivery(rq.orderId(), rq.productName(), rq.productCount(), rq.address());
+//    }
 
     @GetMapping("/delivery/v1/deliveries/{deliveryId}")
     public Delivery getDelivery(@PathVariable(value = "deliveryId") Long deliveryId) {
