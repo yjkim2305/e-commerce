@@ -1,11 +1,13 @@
 package com.example.categoryservice.application.service;
 
+import com.example.categoryservice.application.dto.KafkaProductTagsMessage;
 import com.example.categoryservice.application.repository.ProductRepository;
 import com.example.categoryservice.application.repository.SellerProductRepository;
 import com.example.categoryservice.domain.Product;
 import com.example.categoryservice.domain.SellerProduct;
 import com.example.categoryservice.infrastructure.entity.cassandra.ProductEntity;
 import com.example.categoryservice.infrastructure.repository.ProductCassandraRepository;
+import com.example.categoryservice.kafka.KafkaMessageProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class CategoryService {
 
     private final ProductRepository productRepository;
     private final SellerProductRepository sellerProductRepository;
+    private final KafkaMessageProducer kafkaMessageProducer;
 
     public Product registerProduct(
             Long sellerId,
@@ -30,7 +33,7 @@ public class CategoryService {
     ) {
         SellerProduct sellerProduct = sellerProductRepository.save(SellerProduct.from(sellerId));
 
-        //search service에 addtag
+        kafkaMessageProducer.send("product_tags_added", KafkaProductTagsMessage.of(sellerProduct.getId(), tags));
 
         return productRepository.save(Product.of(sellerProduct.getId(), sellerId, name, description, price, stockCount, tags));
     }
@@ -38,7 +41,7 @@ public class CategoryService {
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId);
 
-        //search service remove tag
+        kafkaMessageProducer.send("product_tags_removed", KafkaProductTagsMessage.of(product.getId(), product.getTags()));
 
         productRepository.deleteById(productId);
         sellerProductRepository.deleteById(productId);
