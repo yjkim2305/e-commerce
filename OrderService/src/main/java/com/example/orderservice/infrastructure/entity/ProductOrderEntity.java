@@ -23,6 +23,7 @@ public class ProductOrderEntity {
     private OrderStatus orderStatus;
     private Long paymentId;
     private Long deliveryId;
+    private String deliveryAddress;
 
     public static ProductOrderEntity toEntity(ProductOrder productOrder) {
         return ProductOrderEntity.builder()
@@ -33,6 +34,7 @@ public class ProductOrderEntity {
                 .orderStatus(productOrder.getOrderStatus())
                 .paymentId(productOrder.getPaymentId())
                 .deliveryId(productOrder.getDeliveryId())
+                .deliveryAddress(productOrder.getDeliveryAddress())
                 .build();
     }
 }

@@ -9,6 +9,7 @@ import com.example.orderservice.feign.CategoryClient;
 import com.example.orderservice.feign.DeliveryClient;
 import com.example.orderservice.feign.PaymentClient;
 import com.example.orderservice.infrastructure.entity.ProductOrderEntity;
+import com.example.orderservice.kafka.KafkaMessageProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ public class OrderService {
     private final CategoryClient categoryClient;
     private final DeliveryClient deliveryClient;
     private final PaymentClient paymentClient;
+    private final KafkaMessageProducer kafkaMessageProducer;
 
     @Transactional
     public OrderIntoDto createOrderInfo(Long userId, Long productId, Long count) {
@@ -37,7 +39,7 @@ public class OrderService {
 
         //주문 정보 생성
         ProductOrder order = orderRepository.save(ProductOrder.of(userId, productId, count, OrderStatus.INITIATED
-                , null, null));
+                , null, null, null));
 
 
         return OrderIntoDto.of(order.getId(), paymentMethod, userAddress);
@@ -51,29 +53,48 @@ public class OrderService {
         ProductDto product = categoryClient.getProductById(order.getProductId());
 
         //결제
-        PaymentDto payment = paymentClient.processPayment(
+//        PaymentDto payment = paymentClient.processPayment(
+//                PaymentRegisterDto.of(order.getId(), order.getUserId(),
+//                        product.getPrice() * order.getCount(), paymentMethodId)
+//        );
+
+        kafkaMessageProducer.send("payment_request",
                 PaymentRegisterDto.of(order.getId(), order.getUserId(),
-                        product.getPrice() * order.getCount(), paymentMethodId)
-        );
+                product.getPrice() * order.getCount(), paymentMethodId));
+
+
+
 
         //배송 요청
-        UserAddressDto address = deliveryClient.getAddress(addressId);
+//        UserAddressDto address = deliveryClient.getAddress(addressId);
+//
+//        DeliveryDto delivery = deliveryClient.processDelivery(
+//                DeliveryRegisterDto.of(
+//                        order.getId(),
+//                        product.getName(),
+//                        order.getCount(),
+//                        address.getAddress()
+//                )
+//        );
+//
+//        //재고 감소
+//        categoryClient.decreaseStockCount(order.getProductId(), ProductDecreaseStockCountDto.from(order.getCount()));
 
-        DeliveryDto delivery = deliveryClient.processDelivery(
-                DeliveryRegisterDto.of(
-                        order.getId(),
-                        product.getName(),
-                        order.getCount(),
-                        address.getAddress()
-                )
-        );
-
-        //재고 감소
-        categoryClient.decreaseStockCount(order.getProductId(), ProductDecreaseStockCountDto.from(order.getCount()));
-        
+        UserAddressDto userAddress = deliveryClient.getAddress(addressId);
         //주문 정보 업데이트
-        order.modifyOrderInfo(payment.getId(), delivery.getId(), OrderStatus.DELIVERY_REQUESTED);
+        order.modifyOrderStatus(OrderStatus.PAYMENT_REQUESTED, userAddress.getAddress());
 
+        return orderRepository.save(order);
+    }
+
+    public void decreaseStockCount(Long orderId) {
+        ProductOrder order = orderRepository.findById(orderId);
+        categoryClient.decreaseStockCount(order.getProductId(), ProductDecreaseStockCountDto.from(order.getCount()));
+    }
+
+    public ProductOrder deliveryRequest(Long orderId) {
+        ProductOrder order = orderRepository.findById(orderId);
+        order.modifyOrderInfo(order.getPaymentId(), OrderStatus.DELIVERY_REQUESTED);
         return orderRepository.save(order);
     }
 

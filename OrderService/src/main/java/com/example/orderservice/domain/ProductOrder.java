@@ -15,6 +15,7 @@ public class ProductOrder {
     private OrderStatus orderStatus;
     private Long paymentId;
     private Long deliveryId;
+    private String deliveryAddress;
 
     public static ProductOrder from(ProductOrderEntity productOrderEntity) {
         return ProductOrder.builder()
@@ -25,10 +26,11 @@ public class ProductOrder {
                 .orderStatus(productOrderEntity.getOrderStatus())
                 .paymentId(productOrderEntity.getPaymentId())
                 .deliveryId(productOrderEntity.getDeliveryId())
+                .deliveryAddress(productOrderEntity.getDeliveryAddress())
                 .build();
     }
 
-    public static ProductOrder of(Long userId, Long productId, Long count, OrderStatus orderStatus, Long paymentId, Long deliveryId) {
+    public static ProductOrder of(Long userId, Long productId, Long count, OrderStatus orderStatus, Long paymentId, Long deliveryId, String deliveryAddress) {
         return ProductOrder.builder()
                 .userId(userId)
                 .productId(productId)
@@ -36,12 +38,17 @@ public class ProductOrder {
                 .orderStatus(orderStatus)
                 .paymentId(paymentId)
                 .deliveryId(deliveryId)
+                .deliveryAddress(deliveryAddress)
                 .build();
     }
 
-    public void modifyOrderInfo(Long paymentId, Long deliveryId, OrderStatus orderStatus) {
+    public void modifyOrderInfo(Long paymentId, OrderStatus orderStatus) {
         this.paymentId = paymentId;
-        this.deliveryId = deliveryId;
         this.orderStatus = orderStatus;
+    }
+
+    public void modifyOrderStatus(OrderStatus orderStatus, String deliveryAddress) {
+        this.orderStatus = orderStatus;
+        this.deliveryAddress = deliveryAddress;
     }
 }
