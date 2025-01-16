@@ -52,33 +52,10 @@ public class OrderService {
         //상품 정보 조회
         ProductDto product = categoryClient.getProductById(order.getProductId());
 
-        //결제
-//        PaymentDto payment = paymentClient.processPayment(
-//                PaymentRegisterDto.of(order.getId(), order.getUserId(),
-//                        product.getPrice() * order.getCount(), paymentMethodId)
-//        );
-
         kafkaMessageProducer.send("payment_request",
                 PaymentRegisterDto.of(order.getId(), order.getUserId(),
                 product.getPrice() * order.getCount(), paymentMethodId));
 
-
-
-
-        //배송 요청
-//        UserAddressDto address = deliveryClient.getAddress(addressId);
-//
-//        DeliveryDto delivery = deliveryClient.processDelivery(
-//                DeliveryRegisterDto.of(
-//                        order.getId(),
-//                        product.getName(),
-//                        order.getCount(),
-//                        address.getAddress()
-//                )
-//        );
-//
-//        //재고 감소
-//        categoryClient.decreaseStockCount(order.getProductId(), ProductDecreaseStockCountDto.from(order.getCount()));
 
         UserAddressDto userAddress = deliveryClient.getAddress(addressId);
         //주문 정보 업데이트
