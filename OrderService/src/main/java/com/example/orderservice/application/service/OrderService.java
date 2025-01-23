@@ -2,14 +2,19 @@ package com.example.orderservice.application.service;
 
 import com.example.orderservice.api.response.ProductOrderDetailResponse;
 import com.example.orderservice.application.dto.*;
+import com.example.orderservice.application.repository.OrderOutboxRepository;
 import com.example.orderservice.application.repository.OrderRepository;
+import com.example.orderservice.domain.OrderOutbox;
 import com.example.orderservice.domain.ProductOrder;
 import com.example.orderservice.domain.enums.OrderStatus;
+import com.example.orderservice.domain.enums.OutboxStatus;
 import com.example.orderservice.feign.CategoryClient;
 import com.example.orderservice.feign.DeliveryClient;
 import com.example.orderservice.feign.PaymentClient;
 import com.example.orderservice.infrastructure.entity.ProductOrderEntity;
 import com.example.orderservice.kafka.KafkaMessageProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +30,8 @@ public class OrderService {
     private final DeliveryClient deliveryClient;
     private final PaymentClient paymentClient;
     private final KafkaMessageProducer kafkaMessageProducer;
+    private final OrderOutboxRepository orderOutboxRepository;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public OrderIntoDto createOrderInfo(Long userId, Long productId, Long count) {
@@ -52,9 +59,21 @@ public class OrderService {
         //상품 정보 조회
         ProductDto product = categoryClient.getProductById(order.getProductId());
 
-        kafkaMessageProducer.send("payment_request",
-                PaymentRegisterDto.of(order.getId(), order.getUserId(),
-                product.getPrice() * order.getCount(), paymentMethodId));
+        try {
+            orderOutboxRepository.save(
+            OrderOutbox.of("payment_request",
+                    objectMapper.writeValueAsString(PaymentRegisterDto.of(order.getId(), order.getUserId(),
+                            product.getPrice() * order.getCount(), paymentMethodId)),
+                    OutboxStatus.INIT)
+            );
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to serialize message", e);
+        }
+
+//        kafkaMessageProducer.send("payment_request",
+//                PaymentRegisterDto.of(order.getId(), order.getUserId(),
+//                        product.getPrice() * order.getCount(), paymentMethodId));
 
 
         UserAddressDto userAddress = deliveryClient.getAddress(addressId);
@@ -87,7 +106,6 @@ public class OrderService {
 
         return ProductOrderDetailDto.of(order, payment, delivery);
     }
-
 
 
 }

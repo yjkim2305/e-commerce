@@ -5,6 +5,8 @@ import com.example.payservice.consumer.dto.KafkaPaymentProcessMessage;
 import com.example.payservice.consumer.dto.KafkaPaymentResultMessage;
 import com.example.payservice.domain.Payment;
 import com.example.payservice.kafka.KafkaMessageProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,27 +25,41 @@ public class KafkaPayConsumer {
     private final PaymentService paymentService;
     private final KafkaMessageProducer kafkaMessageProducer;
 
-    @KafkaListener(topics = "payment_request")
-    public void consumePayRequest(ConsumerRecord<String, String> data, Acknowledgment acknowledgment, Consumer<String, String> consumer){
-        try {
+    @KafkaListener(topics = "ecommerce.payment_request")
+    public void consumePayRequest(ConsumerRecord<String, String> data, Acknowledgment acknowledgment, Consumer<String, String> consumer) throws JsonProcessingException {
 
-            KafkaPaymentProcessMessage message = objectMapper.readValue(data.value(), KafkaPaymentProcessMessage.class);
-            Payment payment = paymentService.processPayment(
-                    message.getOrderId(),
-                    message.getUserId(),
-                    message.getAmountKRW(),
-                    message.getPaymentMethodId()
-            );
+        JsonNode root = objectMapper.readTree(data.value());
+        String operation = root.path("payload").path("op").asText();
+        log.info(data.value());
+        if ("c".equals(operation)) {
+            JsonNode afterNode = root.path("payload").path("after");
+            String payload = afterNode.path("payload").asText();
+            try {
 
-            // ExternalPaymentAdapter를 사용한 외부 연동도 EDA로 수행될 수 있음.
+                KafkaPaymentProcessMessage message = objectMapper.readValue(payload, KafkaPaymentProcessMessage.class);
+                Payment payment = paymentService.processPayment(
+                        message.getOrderId(),
+                        message.getUserId(),
+                        message.getAmountKRW(),
+                        message.getPaymentMethodId()
+                );
 
-            kafkaMessageProducer.send("payment_result", KafkaPaymentResultMessage.of(payment.getOrderId(), payment.getId(), payment.getPaymentStatus()));
+                // ExternalPaymentAdapter를 사용한 외부 연동도 EDA로 수행될 수 있음.
+
+                kafkaMessageProducer.send("payment_result", KafkaPaymentResultMessage.of(payment.getOrderId(), payment.getId(), payment.getPaymentStatus()));
+                acknowledgment.acknowledge();
+                log.info("Processed message: {}", message);
+            } catch (Exception e) {
+                log.error("Failed to process message: {}", data.value(), e);
+            }
+        } else {
             acknowledgment.acknowledge();
-            log.info("Processed message: {}", message);
-        } catch (Exception e) {
-            log.error("Failed to process message: {}", data.value(), e);
         }
+
     }
+
+
+
 
 
 

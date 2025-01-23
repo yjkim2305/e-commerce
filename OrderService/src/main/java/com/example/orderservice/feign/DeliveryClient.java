@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "deliveryClient", url = "http://localhost:8083/delivery/v1")
+@FeignClient(name = "deliveryClient", url = "http://localhost:8086/delivery/v1")
 public interface DeliveryClient {
     @GetMapping("/users/{userId}/first/address")
     public UserAddressDto getFirstAddress(@PathVariable(value = "userId") Long userId);

@@ -1,0 +1,26 @@
+{
+  "name": "debezium-mysql-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+    "tasks.max": "1",
+    "database.hostname": "coupon-mysql",
+    "database.port": "3306",
+    "database.user": "ecommerce",
+    "database.password": "1234",
+    "database.server.id": "123456",
+    "database.server.name": "ecommerce_server",
+    "database.include.list": "ecommerce",
+    "table.include.list": "ecommerce.order_outbox",
+    "schema.history.internal.kafka.bootstrap.servers": "kafka1:9092,kafka2:9093,kafka3:9094",
+    "schema.history.internal.kafka.topic": "schema-changes.ecommerce",
+    "snapshot.mode": "initial",
+    "tombstones.on.delete": "false",
+    "database.allowPublicKeyRetrieval": "true",
+    "provide.transaction.metadata": "true",
+    "topic.prefix": "ecommerce",
+    "transforms": "route",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.route.regex": ".*",
+    "transforms.route.replacement": "ecommerce.payment_request"
+  }
+}
